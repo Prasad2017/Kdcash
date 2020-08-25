@@ -27,10 +27,11 @@ import androidx.core.content.ContextCompat;
 import androidx.core.widget.NestedScrollView;
 
 import com.google.android.gms.maps.GoogleMap;
-import com.mlmecommerce.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import in.kdcash.R;
 
 public class Tools {
 

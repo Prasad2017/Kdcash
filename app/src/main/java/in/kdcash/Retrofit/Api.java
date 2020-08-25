@@ -36,7 +36,7 @@ public class Api {
                     .build();
 
             retrofit = new Retrofit.Builder()
-                    .baseUrl("http://anypayments.biz")
+                    .baseUrl("http://kdcash.in/")
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .client(httpClient)
                     .build();

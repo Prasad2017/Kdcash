@@ -95,7 +95,7 @@ public class Registration extends AppCompatActivity {
 
                 if (countryResponseList!=null){
 
-                    Dialog dialog = new Dialog(Registration.this);
+                    dialog = new Dialog(Registration.this);
                     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                     dialog.setContentView(R.layout.country_list);
                     dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
@@ -200,7 +200,7 @@ public class Registration extends AppCompatActivity {
 
                 if (stateResponseList!=null){
 
-                    Dialog dialog = new Dialog(Registration.this);
+                    dialog = new Dialog(Registration.this);
                     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                     dialog.setContentView(R.layout.country_list);
                     dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
@@ -307,7 +307,7 @@ public class Registration extends AppCompatActivity {
 
                 if (cityResponseList!=null){
 
-                    Dialog dialog = new Dialog(Registration.this);
+                    dialog = new Dialog(Registration.this);
                     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                     dialog.setContentView(R.layout.country_list);
                     dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
@@ -412,7 +412,7 @@ public class Registration extends AppCompatActivity {
 
                 if (areaResponseList!=null){
 
-                    Dialog dialog = new Dialog(Registration.this);
+                    dialog = new Dialog(Registration.this);
                     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                     dialog.setContentView(R.layout.country_list);
                     dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
@@ -516,7 +516,7 @@ public class Registration extends AppCompatActivity {
 
                 if (pincodeResponseList!=null){
 
-                    Dialog dialog = new Dialog(Registration.this);
+                    dialog = new Dialog(Registration.this);
                     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                     dialog.setContentView(R.layout.country_list);
                     dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
@@ -637,7 +637,7 @@ public class Registration extends AppCompatActivity {
 
         countryResponseList.clear();
 
-        Call<Country> call = Api.getClient().getCountryList();
+        Call<Country> call = Api.getClient().getCountryList("1", "500");
         call.enqueue(new Callback<Country>() {
             @Override
             public void onResponse(Call<Country> call, Response<Country> response) {
@@ -645,6 +645,8 @@ public class Registration extends AppCompatActivity {
                 if (response.isSuccessful()){
 
                     if (response.body().getSuccess().booleanValue()==true){
+
+                        Log.e("responce", ""+response.body().getData());
 
                         countryResponseList = response.body().getData();
 
@@ -666,7 +668,7 @@ public class Registration extends AppCompatActivity {
                                 countryId  = countryResponse.getCode();
                                 countryName  = countryResponse.getName();
 
-                                getStateList(countryId);
+                               getStateList(countryId);
 
                             }
                         }
