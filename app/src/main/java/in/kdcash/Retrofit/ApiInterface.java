@@ -12,7 +12,7 @@ import retrofit2.http.Query;
 
 public interface ApiInterface {
 
-    @GET("api/api/General/country")
+    @GET("/api/api/General/country")
     Call<Country> getCountryList(@Query("pageNo") String pageNo,
                                  @Query("pageSize") String pageSize);
 

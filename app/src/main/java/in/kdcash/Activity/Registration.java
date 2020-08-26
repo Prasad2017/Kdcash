@@ -31,6 +31,7 @@ import in.kdcash.Adapter.CountryAdapter;
 import in.kdcash.Adapter.PincodeAdapter;
 import in.kdcash.Adapter.StateAdapter;
 import in.kdcash.Extra.DetectConnection;
+import in.kdcash.Model.AllStateList;
 import in.kdcash.Model.Area;
 import in.kdcash.Model.AreaResponse;
 import in.kdcash.Model.City;
@@ -39,6 +40,7 @@ import in.kdcash.Model.Country;
 import in.kdcash.Model.CountryResponse;
 import in.kdcash.Model.PincodeResponse;
 import in.kdcash.Model.State;
+import in.kdcash.Model.StateList;
 import in.kdcash.Model.StateResponse;
 import in.kdcash.R;
 import in.kdcash.Retrofit.Api;
@@ -55,6 +57,7 @@ public class Registration extends AppCompatActivity {
     List<CountryResponse> searchCountryResponseList = new ArrayList<>();
     List<StateResponse> stateResponseList = new ArrayList<>();
     List<StateResponse> searchStateResponseList = new ArrayList<>();
+    List<StateList> stateLists = new ArrayList<>();
     List<CityResponse> cityResponseList = new ArrayList<>();
     List<CityResponse> searchCityResponseList = new ArrayList<>();
     List<AreaResponse> areaResponseList = new ArrayList<>();
@@ -715,15 +718,14 @@ public class Registration extends AppCompatActivity {
                 if (response.isSuccessful()){
 
                     if (response.body().getSuccess().booleanValue()==true){
-
-                        stateResponseList = response.body().getData();
+                        response.body().getData();
 
                         StateResponse countryResponse = stateResponseList.get(0);
                         stateTxt.setText(stateResponseList.get(0).getName());
                         stateId = countryResponse.getCode();
                         stateName  = countryResponse.getName();
 
-                        getCityList(stateId);
+                        getCityList(stateName);
 
 
                     } else {

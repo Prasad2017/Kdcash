@@ -15,7 +15,7 @@ public class State {
     private Boolean isSuccess;
     @SerializedName("Data")
     @Expose
-    private List<StateResponse> data = null;
+    private List<StateList> data = null;
 
 
     public String getMessage() {
@@ -34,11 +34,11 @@ public class State {
         isSuccess = success;
     }
 
-    public List<StateResponse> getData() {
+    public List<StateList> getData() {
         return data;
     }
 
-    public void setData(List<StateResponse> data) {
+    public void setData(List<StateList> data) {
         this.data = data;
     }
 }
