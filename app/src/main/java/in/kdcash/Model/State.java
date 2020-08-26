@@ -15,7 +15,11 @@ public class State {
     private Boolean isSuccess;
     @SerializedName("Data")
     @Expose
-    private List<StateList> data = null;
+    private StateList data = null;
+    @SerializedName("AgentRandomId")
+    @Expose
+    private String AgentRandomId;
+
 
 
     public String getMessage() {
@@ -34,11 +38,19 @@ public class State {
         isSuccess = success;
     }
 
-    public List<StateList> getData() {
+    public StateList getData() {
         return data;
     }
 
-    public void setData(List<StateList> data) {
+    public void setData(StateList data) {
         this.data = data;
+    }
+
+    public String getAgentRandomId() {
+        return AgentRandomId;
+    }
+
+    public void setAgentRandomId(String agentRandomId) {
+        AgentRandomId = agentRandomId;
     }
 }

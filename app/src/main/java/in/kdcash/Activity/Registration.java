@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 import com.andreabaccega.widget.FormEditText;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindViews;
@@ -53,17 +55,17 @@ public class Registration extends AppCompatActivity {
     @BindViews({R.id.firstName, R.id.lastName, R.id.mobileNumber, R.id.emailId, R.id.address})
     List<FormEditText> formEditTexts;
     public static TextView countryTxt, stateTxt, cityTxt, areaTxt, pincodeTxt;
-    List<CountryResponse> countryResponseList = new ArrayList<>();
-    List<CountryResponse> searchCountryResponseList = new ArrayList<>();
-    List<StateResponse> stateResponseList = new ArrayList<>();
-    List<StateResponse> searchStateResponseList = new ArrayList<>();
-    List<StateList> stateLists = new ArrayList<>();
-    List<CityResponse> cityResponseList = new ArrayList<>();
-    List<CityResponse> searchCityResponseList = new ArrayList<>();
-    List<AreaResponse> areaResponseList = new ArrayList<>();
-    List<AreaResponse> searchAreaResponseList = new ArrayList<>();
-    List<PincodeResponse> pincodeResponseList = new ArrayList<>();
-    List<PincodeResponse> searchPincodeResponseList = new ArrayList<>();
+    public static List<CountryResponse> countryResponseList = new ArrayList<>();
+    public static List<CountryResponse> searchCountryResponseList = new ArrayList<>();
+    public static List<StateResponse> stateResponseList = new ArrayList<>();
+    public static List<StateResponse> searchStateResponseList = new ArrayList<>();
+    public static List<AllStateList> allStateLists = new ArrayList<>();
+    public static List<CityResponse> cityResponseList = new ArrayList<>();
+    public static List<CityResponse> searchCityResponseList = new ArrayList<>();
+    public static List<AreaResponse> areaResponseList = new ArrayList<>();
+    public static List<AreaResponse> searchAreaResponseList = new ArrayList<>();
+    public static List<PincodeResponse> pincodeResponseList = new ArrayList<>();
+    public static List<PincodeResponse> searchPincodeResponseList = new ArrayList<>();
     public static Dialog dialog;
     RecyclerView recyclerView;
     TextView close, searchTxt;
@@ -101,7 +103,7 @@ public class Registration extends AppCompatActivity {
                     dialog = new Dialog(Registration.this);
                     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                     dialog.setContentView(R.layout.country_list);
-                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                     dialog.setCancelable(true);
 
                     recyclerView = dialog.findViewById(R.id.recyclerView);
@@ -206,7 +208,7 @@ public class Registration extends AppCompatActivity {
                     dialog = new Dialog(Registration.this);
                     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                     dialog.setContentView(R.layout.country_list);
-                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                     dialog.setCancelable(true);
 
                     recyclerView = dialog.findViewById(R.id.recyclerView);
@@ -313,7 +315,7 @@ public class Registration extends AppCompatActivity {
                     dialog = new Dialog(Registration.this);
                     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                     dialog.setContentView(R.layout.country_list);
-                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                     dialog.setCancelable(true);
 
                     recyclerView = dialog.findViewById(R.id.recyclerView);
@@ -418,7 +420,7 @@ public class Registration extends AppCompatActivity {
                     dialog = new Dialog(Registration.this);
                     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                     dialog.setContentView(R.layout.country_list);
-                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                     dialog.setCancelable(true);
 
                     recyclerView = dialog.findViewById(R.id.recyclerView);
@@ -522,7 +524,7 @@ public class Registration extends AppCompatActivity {
                     dialog = new Dialog(Registration.this);
                     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                     dialog.setContentView(R.layout.country_list);
-                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                     dialog.setCancelable(true);
 
                     recyclerView = dialog.findViewById(R.id.recyclerView);
@@ -620,9 +622,53 @@ public class Registration extends AppCompatActivity {
                 break;
 
             case R.id.signUp:
+
+                if (formEditTexts.get(0).testValidity() && formEditTexts.get(1).testValidity() && formEditTexts.get(2).testValidity()
+                        && formEditTexts.get(3).testValidity() && formEditTexts.get(4).testValidity()){
+
+                    if (countryTxt.getText().toString().equalsIgnoreCase("")){
+
+                        if (stateTxt.getText().toString().equalsIgnoreCase("")){
+
+                            if (cityTxt.getText().toString().equalsIgnoreCase("")){
+
+                                if (areaTxt.getText().toString().equalsIgnoreCase("")){
+
+                                    if (pincodeTxt.getText().toString().equalsIgnoreCase("")){
+
+                                        registration(formEditTexts.get(0).getText().toString(), formEditTexts.get(1).getText().toString(), formEditTexts.get(2).getText().toString(),
+                                                formEditTexts.get(3).getText().toString(), formEditTexts.get(4).getText().toString(), countryTxt.getText().toString(), stateTxt.getText().toString(),
+                                                cityTxt.getText().toString(), areaTxt.getText().toString(), pincodeTxt.getText().toString());
+
+                                    } else {
+                                        Toasty.normal(Registration.this, "select pincode", Toasty.LENGTH_SHORT);
+                                    }
+
+                                } else {
+                                    Toasty.normal(Registration.this, "select area", Toasty.LENGTH_SHORT);
+                                }
+
+                            } else {
+                                Toasty.normal(Registration.this, "select city", Toasty.LENGTH_SHORT);
+                            }
+
+                        } else {
+                            Toasty.normal(Registration.this, "select state", Toasty.LENGTH_SHORT);
+                        }
+
+                    } else {
+                        Toasty.normal(Registration.this, "select country", Toasty.LENGTH_SHORT);
+                    }
+
+                }
+
                 break;
 
         }
+
+    }
+
+    public void registration(String firstName, String lastName, String mobileNumber, String emailId, String address, String countryName, String stateName, String cityName, String areaName, String pincodeName){
 
     }
 
@@ -652,32 +698,42 @@ public class Registration extends AppCompatActivity {
                         Log.e("responce", ""+response.body().getData());
 
                         countryResponseList = response.body().getData();
+                        if (countryResponseList.size()>0) {
 
-                        for (int i =0;i<countryResponseList.size();i++){
+                            for (int i = 0; i < countryResponseList.size(); i++) {
 
-                            if (countryResponseList.get(i).getName().toLowerCase().contains("India".toLowerCase().trim())) {
+                                if (countryResponseList.get(i).getName().toLowerCase().contains("India".toLowerCase().trim())) {
 
-                                CountryResponse countryResponse = countryResponseList.get(i);
-                                countryTxt.setText(countryResponseList.get(i).getName());
-                                countryId  = countryResponse.getCode();
-                                countryName  = countryResponse.getName();
+                                    CountryResponse countryResponse = countryResponseList.get(i);
+                                    countryTxt.setText(countryResponseList.get(i).getName());
+                                    countryId = countryResponse.getCode();
+                                    countryName = countryResponse.getName();
 
-                                getStateList(countryId);
+                                    getStateList(countryName);
 
-                            } else {
+                                } else {
 
-                                CountryResponse countryResponse = countryResponseList.get(0);
-                                countryTxt.setText(countryResponseList.get(0).getName());
-                                countryId  = countryResponse.getCode();
-                                countryName  = countryResponse.getName();
+                                    CountryResponse countryResponse = countryResponseList.get(0);
+                                    countryTxt.setText(countryResponseList.get(0).getName());
+                                    countryId = countryResponse.getCode();
+                                    countryName = countryResponse.getName();
 
-                               getStateList(countryId);
+                                    getStateList(countryName);
 
+                                }
                             }
+                        } else {
+                            countryResponseList = null;
+                            countryTxt.setText("");
+                            stateTxt.setText("");
+                            cityTxt.setText("");
+                            areaTxt.setText("");
+                            pincodeTxt.setText("");
                         }
 
                     } else {
 
+                        countryResponseList = null;
                         countryTxt.setText("");
                         stateTxt.setText("");
                         cityTxt.setText("");
@@ -687,7 +743,7 @@ public class Registration extends AppCompatActivity {
                     }
 
                 } else {
-
+                    countryResponseList = null;
                     countryTxt.setText("");
                     stateTxt.setText("");
                     cityTxt.setText("");
@@ -706,11 +762,11 @@ public class Registration extends AppCompatActivity {
 
     }
 
-    private void getStateList(String countryId) {
+    public static void getStateList(String countryName) {
 
         stateResponseList.clear();
 
-        Call<State> call = Api.getClient().getStateList(countryId);
+        Call<State> call = Api.getClient().getStateList();
         call.enqueue(new Callback<State>() {
             @Override
             public void onResponse(Call<State> call, Response<State> response) {
@@ -718,18 +774,50 @@ public class Registration extends AppCompatActivity {
                 if (response.isSuccessful()){
 
                     if (response.body().getSuccess().booleanValue()==true){
-                        response.body().getData();
 
-                        StateResponse countryResponse = stateResponseList.get(0);
-                        stateTxt.setText(stateResponseList.get(0).getName());
-                        stateId = countryResponse.getCode();
-                        stateName  = countryResponse.getName();
+                        StateList stateLists = response.body().getData();
+                        List<String> stringList = new ArrayList<>();
 
-                        getCityList(stateName);
+                        if (stateLists.getAllStateLists().size()>0) {
 
+                            allStateLists = stateLists.getAllStateLists();
+
+                            for (int j = 0; j < allStateLists.size(); j++) {
+
+                                if (allStateLists.get(j).getCountry().equalsIgnoreCase(countryName)) {
+
+                                    Log.e("country", "" + countryName);
+
+                                    stringList = allStateLists.get(j).getStates();
+
+                                    for (int k = 0; k < stringList.size(); k++) {
+
+                                        StateResponse stateResponse = new StateResponse();
+                                        stateResponse.setName(stringList.get(k));
+                                        stateResponseList.add(stateResponse);
+                                    }
+
+                                    StateResponse countryResponse = stateResponseList.get(0);
+                                    stateTxt.setText(stateResponseList.get(0).getName());
+                                    stateId = countryResponse.getCode();
+                                    stateName = countryResponse.getName();
+
+                                    getCityList(stateName);
+
+                                } else {
+
+                                }
+                            }
+                        } else {
+                            stateResponseList = null;
+                            stateTxt.setText("");
+                            cityTxt.setText("");
+                            areaTxt.setText("");
+                            pincodeTxt.setText("");
+                        }
 
                     } else {
-
+                        stateResponseList = null;
                         stateTxt.setText("");
                         cityTxt.setText("");
                         areaTxt.setText("");
@@ -738,7 +826,7 @@ public class Registration extends AppCompatActivity {
                     }
 
                 } else {
-
+                    stateResponseList = null;
                     stateTxt.setText("");
                     cityTxt.setText("");
                     areaTxt.setText("");
@@ -750,44 +838,47 @@ public class Registration extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<State> call, Throwable t) {
-                Log.e("countryError", ""+t.getMessage());
+                stateResponseList = null;
+                Log.e("stateError", ""+t.getMessage());
             }
         });
 
     }
 
-    private void getCityList(String stateId) {
+    public static void getCityList(String stateName) {
 
         cityResponseList.clear();
 
-        Call<City> call = Api.getClient().getCityList(stateId);
+        Call<City> call = Api.getClient().getCityList("1", "15000", stateName);
         call.enqueue(new Callback<City>() {
             @Override
             public void onResponse(Call<City> call, Response<City> response) {
 
                 if (response.isSuccessful()){
 
-                    if (response.body().getSuccess().booleanValue()==true){
+                    if (response.body().getSuccess().booleanValue()==true) {
 
                         cityResponseList = response.body().getData();
 
-                        CityResponse cityResponse = cityResponseList.get(0);
-                        cityTxt.setText(cityResponseList.get(0).getName());
-                        cityId = cityResponse.getCode();
-                        cityName  = cityResponse.getName();
+                        if (cityResponseList.size() > 0) {
 
+                            CityResponse cityResponse = cityResponseList.get(0);
+                            cityTxt.setText(cityResponseList.get(0).getName());
+                            cityId = cityResponse.getCode();
+                            cityName = cityResponse.getName();
 
-                        getAreaList(cityId);
-                    } else {
+                            //getAreaList(cityId);
+                        } else {
+                            cityResponseList = null;
+                            cityTxt.setText("");
+                            areaTxt.setText("");
+                            pincodeTxt.setText("");
 
-                        cityTxt.setText("");
-                        areaTxt.setText("");
-                        pincodeTxt.setText("");
-
+                        }
                     }
 
                 } else {
-
+                    cityResponseList = null;
                     cityTxt.setText("");
                     areaTxt.setText("");
                     pincodeTxt.setText("");
@@ -798,6 +889,7 @@ public class Registration extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<City> call, Throwable t) {
+                cityResponseList = null;
                 Log.e("countryError", ""+t.getMessage());
             }
         });
@@ -826,14 +918,14 @@ public class Registration extends AppCompatActivity {
 
 
                     } else {
-
+                        areaResponseList = null;
                         areaTxt.setText("");
                         pincodeTxt.setText("");
 
                     }
 
                 } else {
-
+                    areaResponseList = null;
                     areaTxt.setText("");
                     pincodeTxt.setText("");
 
@@ -843,6 +935,7 @@ public class Registration extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Area> call, Throwable t) {
+                areaResponseList = null;
                 Log.e("countryError", ""+t.getMessage());
             }
         });

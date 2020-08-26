@@ -17,12 +17,14 @@ public interface ApiInterface {
                                  @Query("pageSize") String pageSize);
 
 
-    @GET("")
-    Call<State> getStateList(@Query("") String countryId);
+    @GET("/api/api/General/States")
+    Call<State> getStateList();
 
 
-    @GET("")
-    Call<City> getCityList(@Query("") String stateId);
+    @GET("/api/api/General/Districts")
+    Call<City> getCityList(@Query("pageNo") String pageNo,
+                           @Query("pageSize") String pageSize,
+                           @Query("state") String stateId);
 
 
     @GET("")

@@ -52,6 +52,7 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.MyViewHolder
             public void onClick(View view) {
 
                 Registration.stateTxt.setText(countryResponseList.get(position).getName());
+                Registration.getCityList(countryResponseList.get(position).getName());
                 Registration.dialog.cancel();
 
             }

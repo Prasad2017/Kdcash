@@ -108,7 +108,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.Connecti
 
         File file = new File("data/data/in.kdcash/shared_prefs/user.xml");
         if (file.exists()) {
-            Intent intent = new Intent(Login.this, MainActivity.class);
+            Intent intent = new Intent(Login.this, MainPage.class);
             startActivity(intent);
             finish();
         }

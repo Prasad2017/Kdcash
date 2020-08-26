@@ -53,6 +53,8 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.MyViewHo
                 Registration.countryTxt.setText(countryResponseList.get(position).getName());
                 Registration.countryId = countryResponseList.get(position).getCode();
                 Registration.countryName = countryResponseList.get(position).getName();
+
+                Registration.getStateList(countryResponseList.get(position).getName());
                 Registration.dialog.cancel();
 
             }
