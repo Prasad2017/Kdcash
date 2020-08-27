@@ -52,6 +52,7 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.MyViewHolder> 
             public void onClick(View view) {
 
                 Registration.cityTxt.setText(countryResponseList.get(position).getName());
+                Registration.getAreaList(countryResponseList.get(position).getName());
                 Registration.dialog.cancel();
 
             }

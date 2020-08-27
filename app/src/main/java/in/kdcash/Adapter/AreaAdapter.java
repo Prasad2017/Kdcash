@@ -52,6 +52,7 @@ public class AreaAdapter extends RecyclerView.Adapter<AreaAdapter.MyViewHolder> 
             public void onClick(View view) {
 
                 Registration.areaTxt.setText(countryResponseList.get(position).getName());
+                Registration.pincodeTxt.setText(countryResponseList.get(position).getCode());
                 Registration.dialog.cancel();
 
             }

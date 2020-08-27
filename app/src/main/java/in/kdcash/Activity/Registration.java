@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -41,6 +42,8 @@ import in.kdcash.Model.CityResponse;
 import in.kdcash.Model.Country;
 import in.kdcash.Model.CountryResponse;
 import in.kdcash.Model.PincodeResponse;
+import in.kdcash.Model.PostResponse;
+import in.kdcash.Model.ProfileResponse;
 import in.kdcash.Model.State;
 import in.kdcash.Model.StateList;
 import in.kdcash.Model.StateResponse;
@@ -93,7 +96,7 @@ public class Registration extends AppCompatActivity {
 
     }
 
-    @OnClick({R.id.countryTxt, R.id.stateTxt, R.id.signUp})
+    @OnClick({R.id.countryTxt, R.id.stateTxt, R.id.cityTxt, R.id.areaTxt, R.id.signUp})
     public void onClick(View view){
         switch (view.getId()){
             case R.id.countryTxt:
@@ -415,7 +418,7 @@ public class Registration extends AppCompatActivity {
 
             case R.id.areaTxt:
 
-                if (areaResponseList!=null){
+                if (areaResponseList!=null) {
 
                     dialog = new Dialog(Registration.this);
                     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
@@ -454,9 +457,9 @@ public class Registration extends AppCompatActivity {
 
                                 String country = editable.toString();
 
-                                if (country.length()>0){
+                                if (country.length() > 0) {
                                     searchAreaResponseList = new ArrayList<>();
-                                    for (int i=0;i<areaResponseList.size();i++)
+                                    for (int i = 0; i < areaResponseList.size(); i++)
                                         if (areaResponseList.get(i).getName().toLowerCase().contains(country.toLowerCase().trim())) {
                                             searchAreaResponseList.add(areaResponseList.get(i));
                                         }
@@ -468,7 +471,7 @@ public class Registration extends AppCompatActivity {
 
                                 } else {
                                     searchAreaResponseList = new ArrayList<>();
-                                    for (int i=0;i<cityResponseList.size();i++){
+                                    for (int i = 0; i < cityResponseList.size(); i++) {
                                         searchAreaResponseList.add(areaResponseList.get(i));
                                     }
                                 }
@@ -482,7 +485,7 @@ public class Registration extends AppCompatActivity {
                                 recyclerView.setHasFixedSize(true);
 
 
-                            } catch (Exception e){
+                            } catch (Exception e) {
                                 e.printStackTrace();
                             }
 
@@ -500,13 +503,13 @@ public class Registration extends AppCompatActivity {
                         areaAdapter.notifyItemInserted(areaResponseList.size() - 1);
                         recyclerView.setHasFixedSize(true);
 
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
 
                     dialog.show();
 
-
+                } else {
 
                     areaTxt.setText("");
                     pincodeTxt.setText("");
@@ -517,7 +520,7 @@ public class Registration extends AppCompatActivity {
 
                 break;
 
-            case R.id.pincodeTxt:
+           /* case R.id.pincodeTxt:
 
                 if (pincodeResponseList!=null){
 
@@ -619,22 +622,22 @@ public class Registration extends AppCompatActivity {
 
                 }
 
-                break;
+                break;*/
 
             case R.id.signUp:
 
                 if (formEditTexts.get(0).testValidity() && formEditTexts.get(1).testValidity() && formEditTexts.get(2).testValidity()
                         && formEditTexts.get(3).testValidity() && formEditTexts.get(4).testValidity()){
 
-                    if (countryTxt.getText().toString().equalsIgnoreCase("")){
+                    if (!countryTxt.getText().toString().equalsIgnoreCase("")){
 
-                        if (stateTxt.getText().toString().equalsIgnoreCase("")){
+                        if (!stateTxt.getText().toString().equalsIgnoreCase("")){
 
-                            if (cityTxt.getText().toString().equalsIgnoreCase("")){
+                            if (!cityTxt.getText().toString().equalsIgnoreCase("")){
 
-                                if (areaTxt.getText().toString().equalsIgnoreCase("")){
+                                if (!areaTxt.getText().toString().equalsIgnoreCase("")){
 
-                                    if (pincodeTxt.getText().toString().equalsIgnoreCase("")){
+                                    if (!pincodeTxt.getText().toString().equalsIgnoreCase("")){
 
                                         registration(formEditTexts.get(0).getText().toString(), formEditTexts.get(1).getText().toString(), formEditTexts.get(2).getText().toString(),
                                                 formEditTexts.get(3).getText().toString(), formEditTexts.get(4).getText().toString(), countryTxt.getText().toString(), stateTxt.getText().toString(),
@@ -670,6 +673,58 @@ public class Registration extends AppCompatActivity {
 
     public void registration(String firstName, String lastName, String mobileNumber, String emailId, String address, String countryName, String stateName, String cityName, String areaName, String pincodeName){
 
+        ProgressDialog progressDialog = new ProgressDialog(Registration.this);
+        progressDialog.setMessage("Loading...");
+        progressDialog.setTitle("Account is creating");
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.show();
+        progressDialog.setCancelable(false);
+
+
+        ProfileResponse profileResponse = new ProfileResponse();
+        profileResponse.setFirstName(firstName);
+        profileResponse.setLastName(lastName);
+        profileResponse.setMobileNo(mobileNumber);
+        profileResponse.setEmail(emailId);
+        profileResponse.setAddress(address);
+        profileResponse.setCountry(countryName);
+        profileResponse.setState(stateName);
+        profileResponse.setCity(cityName);
+        profileResponse.setArea(areaName);
+        profileResponse.setPincode(pincodeName);
+        profileResponse.setWalletBalance("0");
+
+
+
+        Call<PostResponse> call = Api.getClient().registration(profileResponse);
+        call.enqueue(new Callback<PostResponse>() {
+            @Override
+            public void onResponse(Call<PostResponse> call, Response<PostResponse> response) {
+
+                if (response.isSuccessful()){
+
+                    if (response.body().getSuccess().booleanValue() == true){
+                        progressDialog.dismiss();
+                        Toasty.success(Registration.this, "Registration Done", Toasty.LENGTH_SHORT, true).show();
+                    } else {
+                        Toasty.success(Registration.this, "Registration Fail", Toasty.LENGTH_SHORT, true).show();
+                        progressDialog.dismiss();
+                    }
+
+                } else {
+                    Toasty.success(Registration.this, "Registration Fail", Toasty.LENGTH_SHORT, true).show();
+                    progressDialog.dismiss();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<PostResponse> call, Throwable t) {
+                progressDialog.dismiss();
+                Log.e("registrationError", ""+t.getLocalizedMessage());
+            }
+        });
+
     }
 
     @Override
@@ -683,8 +738,6 @@ public class Registration extends AppCompatActivity {
     }
 
     private void getCountryList() {
-
-        countryResponseList.clear();
 
         Call<Country> call = Api.getClient().getCountryList("1", "500");
         call.enqueue(new Callback<Country>() {
@@ -764,8 +817,6 @@ public class Registration extends AppCompatActivity {
 
     public static void getStateList(String countryName) {
 
-        stateResponseList.clear();
-
         Call<State> call = Api.getClient().getStateList();
         call.enqueue(new Callback<State>() {
             @Override
@@ -809,7 +860,7 @@ public class Registration extends AppCompatActivity {
                                 }
                             }
                         } else {
-                            stateResponseList = null;
+
                             stateTxt.setText("");
                             cityTxt.setText("");
                             areaTxt.setText("");
@@ -817,7 +868,7 @@ public class Registration extends AppCompatActivity {
                         }
 
                     } else {
-                        stateResponseList = null;
+
                         stateTxt.setText("");
                         cityTxt.setText("");
                         areaTxt.setText("");
@@ -826,7 +877,7 @@ public class Registration extends AppCompatActivity {
                     }
 
                 } else {
-                    stateResponseList = null;
+
                     stateTxt.setText("");
                     cityTxt.setText("");
                     areaTxt.setText("");
@@ -847,8 +898,6 @@ public class Registration extends AppCompatActivity {
 
     public static void getCityList(String stateName) {
 
-        cityResponseList.clear();
-
         Call<City> call = Api.getClient().getCityList("1", "15000", stateName);
         call.enqueue(new Callback<City>() {
             @Override
@@ -867,7 +916,7 @@ public class Registration extends AppCompatActivity {
                             cityId = cityResponse.getCode();
                             cityName = cityResponse.getName();
 
-                            //getAreaList(cityId);
+                            getAreaList(cityName);
                         } else {
                             cityResponseList = null;
                             cityTxt.setText("");
@@ -875,7 +924,15 @@ public class Registration extends AppCompatActivity {
                             pincodeTxt.setText("");
 
                         }
-                    }
+
+                    } else {
+
+                    cityResponseList = null;
+                    cityTxt.setText("");
+                    areaTxt.setText("");
+                    pincodeTxt.setText("");
+
+                }
 
                 } else {
                     cityResponseList = null;
@@ -896,11 +953,9 @@ public class Registration extends AppCompatActivity {
 
     }
 
-    private void getAreaList(String cityId) {
+    public static void getAreaList(String cityName) {
 
-        areaResponseList.clear();
-
-        Call<Area> call = Api.getClient().getAreaList(cityId);
+        Call<Area> call = Api.getClient().getAreaList("1", "15000", cityName);
         call.enqueue(new Callback<Area>() {
             @Override
             public void onResponse(Call<Area> call, Response<Area> response) {
@@ -913,6 +968,7 @@ public class Registration extends AppCompatActivity {
 
                         AreaResponse areaResponse = areaResponseList.get(0);
                         areaTxt.setText(areaResponseList.get(0).getName());
+                        pincodeTxt.setText(areaResponseList.get(0).getCode());
                         areaId = areaResponse.getCode();
                         areaName  = areaResponse.getName();
 

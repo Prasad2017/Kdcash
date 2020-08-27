@@ -193,6 +193,7 @@
                 android:textColor="@color/black"
                 android:textColorHint="@color/black"
                 android:hint="Select District"
+                android:visibility="gone"
                 android:layout_gravity="center"
                 android:gravity="center|left"
                 android:paddingLeft="10dp"

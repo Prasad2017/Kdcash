@@ -5,13 +5,13 @@ import com.google.gson.annotations.SerializedName;
 
 public class AreaResponse {
 
-    @SerializedName("Name")
+    @SerializedName("officeName")
     @Expose
     private String name;
     @SerializedName("State")
     @Expose
     private String state;
-    @SerializedName("code")
+    @SerializedName("pincode")
     @Expose
     private String code;
 

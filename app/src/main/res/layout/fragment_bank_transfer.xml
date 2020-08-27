@@ -151,7 +151,6 @@
                         android:imeOptions="actionNext"
                         android:inputType="textMultiLine"
                         android:padding="10dp"
-                        android:maxLength="10"
                         android:singleLine="true"
                         android:textColor="@color/black"
                         android:textColorHint="@color/black"
@@ -171,7 +170,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/idImageFirst"
+                        android:id="@+id/imageFirst"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:layout_gravity="center"
@@ -180,13 +179,13 @@
                         android:fontFamily="@font/poppinsregular"
                         android:gravity="center|left"
                         android:paddingLeft="15dp"
-                        android:text="Select Front Image"
+                        android:text="Select Front Side Image"
                         android:textColor="@color/black"
                         android:textColorHint="@color/black"
                         android:textSize="12sp" />
 
                     <TextView
-                        android:id="@+id/imageFirst"
+                        android:id="@+id/imageFirstChoose"
                         android:layout_width="180dp"
                         android:layout_height="40dp"
                         android:layout_gravity="center"
@@ -210,7 +209,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/idSecondImage"
+                        android:id="@+id/imageSecond"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:layout_gravity="center"
@@ -219,13 +218,13 @@
                         android:fontFamily="@font/poppinsregular"
                         android:gravity="center|left"
                         android:paddingLeft="15dp"
-                        android:text="Select Back Image"
+                        android:text="Select Back Side Image"
                         android:textColor="@color/black"
                         android:textColorHint="@color/black"
                         android:textSize="12sp" />
 
                     <TextView
-                        android:id="@+id/imageSecond"
+                        android:id="@+id/imageSecondChoose"
                         android:layout_width="180dp"
                         android:layout_height="40dp"
                         android:layout_gravity="center"
@@ -371,18 +370,54 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:textColorHint="@color/light_black">
 
+                <com.andreabaccega.widget.FormEditText
+                    android:id="@+id/receiverAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableTint="@color/light_black"
+                    android:fontFamily="@font/poppinsregular"
+                    android:hint="Receiver Address * "
+                    android:imeOptions="actionNext"
+                    android:inputType="textMultiLine"
+                    android:padding="10dp"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/black"
+                    android:textSize="15sp"
+                    tools:ignore="HardcodedText"
+                    whatever:emptyErrorString="Please Fill This"
+                    whatever:testErrorString="Enter valid address" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    app:boxCornerRadiusBottomEnd="5dp"
+                    app:boxCornerRadiusBottomStart="5dp"
+                    app:boxCornerRadiusTopEnd="5dp"
+                    app:boxCornerRadiusTopStart="5dp"
+                    android:gravity="center"
+                    whatever:hintTextColor="@color/light_black"
+                    app:boxStrokeColor="@color/light_black"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:textColorHint="@color/light_black">
+
                     <com.andreabaccega.widget.FormEditText
-                        android:id="@+id/receiverAddress"
+                        android:id="@+id/amount"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawableTint="@color/light_black"
                         android:fontFamily="@font/poppinsregular"
-                        android:hint="Receiver Address * "
+                        android:hint="Amount * "
                         android:layout_marginTop="30dp"
                         android:imeOptions="actionNext"
-                        android:inputType="textMultiLine"
+                        android:inputType="numberDecimal"
                         android:padding="10dp"
-                        android:maxLength="10"
                         android:singleLine="true"
                         android:textColor="@color/black"
                         android:textColorHint="@color/black"
@@ -419,9 +454,8 @@
                         android:hint="Account Number* "
                         android:layout_marginTop="30dp"
                         android:imeOptions="actionNext"
-                        android:inputType="textMultiLine"
+                        android:inputType="text"
                         android:padding="10dp"
-                        android:maxLength="10"
                         android:singleLine="true"
                         android:textColor="@color/black"
                         android:textColorHint="@color/black"
@@ -460,7 +494,81 @@
                         android:imeOptions="actionNext"
                         android:inputType="textMultiLine"
                         android:padding="10dp"
-                        android:maxLength="10"
+                        android:singleLine="true"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/black"
+                        android:textSize="15sp"
+                        tools:ignore="HardcodedText"
+                        whatever:emptyErrorString="Please Fill This"
+                        whatever:testErrorString="Enter valid address" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    app:boxCornerRadiusBottomEnd="5dp"
+                    app:boxCornerRadiusBottomStart="5dp"
+                    app:boxCornerRadiusTopEnd="5dp"
+                    app:boxCornerRadiusTopStart="5dp"
+                    android:gravity="center"
+                    whatever:hintTextColor="@color/light_black"
+                    app:boxStrokeColor="@color/light_black"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:textColorHint="@color/light_black">
+
+                    <com.andreabaccega.widget.FormEditText
+                        android:id="@+id/branchName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableTint="@color/light_black"
+                        android:fontFamily="@font/poppinsregular"
+                        android:hint="Branch Name * "
+                        android:layout_marginTop="30dp"
+                        android:imeOptions="actionNext"
+                        android:padding="10dp"
+                        android:singleLine="true"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/black"
+                        android:textSize="15sp"
+                        tools:ignore="HardcodedText"
+                        whatever:emptyErrorString="Please Fill This"
+                        whatever:testErrorString="Enter valid address" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    app:boxCornerRadiusBottomEnd="5dp"
+                    app:boxCornerRadiusBottomStart="5dp"
+                    app:boxCornerRadiusTopEnd="5dp"
+                    app:boxCornerRadiusTopStart="5dp"
+                    android:gravity="center"
+                    whatever:hintTextColor="@color/light_black"
+                    app:boxStrokeColor="@color/light_black"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:textColorHint="@color/light_black">
+
+                    <com.andreabaccega.widget.FormEditText
+                        android:id="@+id/ifsc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableTint="@color/light_black"
+                        android:fontFamily="@font/poppinsregular"
+                        android:hint="IFSC Code * "
+                        android:layout_marginTop="30dp"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        android:padding="10dp"
                         android:singleLine="true"
                         android:textColor="@color/black"
                         android:textColorHint="@color/black"
@@ -513,6 +621,20 @@
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/submit"
+            android:layout_width="150dp"
+            android:layout_height="40dp"
+            android:background="@drawable/updateborder"
+            android:textColor="@color/white"
+            android:fontFamily="@font/poppinsmedium"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="Submit"
+            android:textSize="18sp"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="80dp"/>
 
     </LinearLayout>
 
