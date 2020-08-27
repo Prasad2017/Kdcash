@@ -680,7 +680,6 @@ public class Registration extends AppCompatActivity {
         progressDialog.show();
         progressDialog.setCancelable(false);
 
-
         ProfileResponse profileResponse = new ProfileResponse();
         profileResponse.setFirstName(firstName);
         profileResponse.setLastName(lastName);
@@ -688,12 +687,12 @@ public class Registration extends AppCompatActivity {
         profileResponse.setEmail(emailId);
         profileResponse.setAddress(address);
         profileResponse.setCountry(countryName);
+        profileResponse.setCountryCode(countryId);
         profileResponse.setState(stateName);
         profileResponse.setCity(cityName);
         profileResponse.setArea(areaName);
         profileResponse.setPincode(pincodeName);
         profileResponse.setWalletBalance("0");
-
 
 
         Call<PostResponse> call = Api.getClient().registration(profileResponse);
@@ -739,6 +738,8 @@ public class Registration extends AppCompatActivity {
 
     private void getCountryList() {
 
+//        countryResponseList.clear();
+
         Call<Country> call = Api.getClient().getCountryList("1", "500");
         call.enqueue(new Callback<Country>() {
             @Override
@@ -748,7 +749,7 @@ public class Registration extends AppCompatActivity {
 
                     if (response.body().getSuccess().booleanValue()==true){
 
-                        Log.e("responce", ""+response.body().getData());
+                        Log.e("response", ""+response.body().getData());
 
                         countryResponseList = response.body().getData();
                         if (countryResponseList.size()>0) {
@@ -816,6 +817,7 @@ public class Registration extends AppCompatActivity {
     }
 
     public static void getStateList(String countryName) {
+
 
         Call<State> call = Api.getClient().getStateList();
         call.enqueue(new Callback<State>() {
@@ -954,6 +956,7 @@ public class Registration extends AppCompatActivity {
     }
 
     public static void getAreaList(String cityName) {
+
 
         Call<Area> call = Api.getClient().getAreaList("1", "15000", cityName);
         call.enqueue(new Callback<Area>() {

@@ -3,7 +3,7 @@ package in.kdcash.Model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class PostResponse {
+public class LoginResponse {
 
     @SerializedName("Message")
     @Expose
@@ -11,16 +11,9 @@ public class PostResponse {
 
     @SerializedName("IsSuccess")
     @Expose
-    public Boolean success;
+    private Boolean isSuccess;
 
 
-    public Boolean getSuccess() {
-        return success;
-    }
-
-    public void setSuccess(Boolean success) {
-        this.success = success;
-    }
 
     public String getMessage() {
         return message;
@@ -29,4 +22,14 @@ public class PostResponse {
     public void setMessage(String message) {
         this.message = message;
     }
+
+    public Boolean getSuccess() {
+        return isSuccess;
+    }
+
+    public void setSuccess(Boolean success) {
+        isSuccess = success;
+    }
+
+
 }

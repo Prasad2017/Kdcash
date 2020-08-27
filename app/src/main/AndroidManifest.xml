@@ -38,11 +38,11 @@
         tools:ignore="AllowBackup,GoogleAppIndexingWarning,UnusedAttribute"
         tools:replace="android:icon">
 
-        <activity android:name=".Activity.MainPage"/>
+        <activity android:name=".Activity.Registration"/>
 
         <activity android:name=".Activity.Login" />
 
-        <activity android:name=".Activity.Registration">
+        <activity android:name=".Activity.MainPage">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

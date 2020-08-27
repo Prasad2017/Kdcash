@@ -7,6 +7,7 @@ import androidx.cardview.widget.CardView;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,6 +17,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -27,6 +29,7 @@ import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.phone.SmsRetriever;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.gson.Gson;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -37,15 +40,34 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.mukesh.OnOtpCompletionListener;
 import com.mukesh.OtpView;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
+import java.text.DecimalFormat;
 import java.util.List;
+import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import es.dmoral.toasty.Toasty;
+import in.kdcash.Extra.Common;
+import in.kdcash.Extra.DetectConnection;
+import in.kdcash.Model.LoginResponse;
+import in.kdcash.Model.OTPResponse;
 import in.kdcash.R;
+import in.kdcash.Retrofit.Api;
+import in.kdcash.helper.AppSignatureHelper;
 import in.kdcash.interfaces.OtpReceivedInterface;
 import in.kdcash.receiver.SmsBroadcastReceiver;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Login extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
         OtpReceivedInterface, GoogleApiClient.OnConnectionFailedListener {
@@ -128,6 +150,50 @@ public class Login extends AppCompatActivity implements GoogleApiClient.Connecti
 
     }
 
+    @OnClick({R.id.signUp})
+    public void onClick(View view){
+
+        switch (view.getId()){
+
+            case R.id.signUp:
+                if (DetectConnection.checkInternetConnection(Login.this)) {
+
+                    if (textView.getText().toString().equalsIgnoreCase("Send OTP")) {
+                        if (formEditTexts.get(1).testValidity()) {
+                            CheckMobile(formEditTexts.get(1).getText().toString().trim());
+                        }
+                    } else if (textView.getText().toString().equalsIgnoreCase("Verify")) {
+                        if (otpCode.equalsIgnoreCase(OTP)) {
+
+                            pref = getSharedPreferences("user", Context.MODE_PRIVATE);
+                            editor = pref.edit();
+                            editor.putString("UserLogin", "UserLoginSuccessful");
+                            editor.commit();
+
+                            Common.saveUserData(Login.this, "accessToken", "accessToken".replace("\"", ""));
+                            Common.saveUserData(Login.this, "userId", "29");
+                            Intent intent = new Intent(Login.this, MainPage.class);
+                            startActivity(intent);
+                            finishAffinity();
+
+                        } else {
+                            Toasty.error(Login.this, "Enter valid otp", Toasty.LENGTH_SHORT).show();
+                            otpView.setVisibility(View.VISIBLE);
+                        }
+                    }
+                } else {
+                    Toasty.warning(Login.this, "No Internet Connection", Toasty.LENGTH_SHORT, true).show();
+                }
+
+                break;
+        }
+
+
+    }
+
+    private void login(String toString, String toString1) {
+    }
+
     @Override
     public void onConnected(@Nullable Bundle bundle) {
 
@@ -153,7 +219,151 @@ public class Login extends AppCompatActivity implements GoogleApiClient.Connecti
 
     }
 
+
+    private void CheckMobile(String mobileNumber) {
+
+        ProgressDialog progressDialog = new ProgressDialog(Login.this);
+        progressDialog.setMessage("Loading...");
+        progressDialog.setTitle("Mobile number is checking");
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.show();
+        progressDialog.setCancelable(false);
+
+        Call<LoginResponse> call = Api.getClient().checkMobileNumber(mobileNumber);
+        call.enqueue(new Callback<LoginResponse>() {
+            @Override
+            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+
+                if (response.body().getSuccess().booleanValue()==true){
+                    progressDialog.dismiss();
+                    if (DetectConnection.checkInternetConnection(Login.this)) {
+                        sendOTP(mobileNumber);
+                    } else {
+                        Toasty.warning(Login.this, "No Internet Connection", Toasty.LENGTH_SHORT, true).show();
+                    }
+                } else if (response.body().getSuccess().booleanValue()==false){
+                    progressDialog.dismiss();
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<LoginResponse> call, Throwable t) {
+                progressDialog.dismiss();
+                Log.e("MobileNumberError", ""+t.getMessage());
+            }
+        });
+
+    }
+
+    private void sendOTP(String mobileNumber) {
+
+        ProgressDialog progressDialog = new ProgressDialog(Login.this);
+        progressDialog.setMessage("Loading...");
+        progressDialog.setTitle("OTP is sending");
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.show();
+        progressDialog.setCancelable(false);
+
+        HASH_KEY = (String) new AppSignatureHelper(this).getAppSignatures().get(0);
+        HASH_KEY = HASH_KEY.replace("+", "%252B");
+        OTP= new DecimalFormat("000000").format(new Random().nextInt(999999));
+        String message = "<#> Your Anypayments verification OTP code is "+ OTP +". Please DO NOT share this OTP with anyone.\n" + HASH_KEY;
+        //Your authentication key
+        String authkey = "YourAuthKey";
+        //Multiple mobiles numbers separated by comma
+        String mobiles = "9999999";
+        //Sender ID,While using route4 sender id should be 6 characters long.
+        String senderId = "DEMOOO";
+        //define route
+        String route="default";
+
+        URLConnection myURLConnection=null;
+        URL myURL=null;
+        BufferedReader reader=null;
+        //encoding message
+        String encoded_message= URLEncoder.encode(message);
+        //Send SMS API
+        String mainUrl="http://198.15.103.106/API/pushsms.aspx?";
+        //Prepare parameter string
+        StringBuilder sbPostData= new StringBuilder(mainUrl);
+        sbPostData.append("loginID=DEMOTEST");
+        sbPostData.append("&password=Zplus@123");
+        sbPostData.append("&mobile="+mobileNumber);
+        sbPostData.append("&text="+encoded_message);
+        sbPostData.append("&senderid="+senderId);
+        sbPostData.append("&route_id=1");
+        sbPostData.append("&Unicode=1");
+        //final string
+        mainUrl = sbPostData.toString();
+        try
+        {
+            //prepare connection
+            myURL = new URL(mainUrl);
+            myURLConnection = myURL.openConnection();
+            myURLConnection.connect();
+            reader= new BufferedReader(new InputStreamReader(myURLConnection.getInputStream()));
+            //reading response
+            String response;
+            while ((response = reader.readLine()) != null) {
+                //print response
+                Log.d("RESPONSE", "" + response);
+
+                Gson gson = new Gson();
+                OTPResponse otpResponse = gson.fromJson(response, OTPResponse.class);
+                Log.d("otpResponse", "" + otpResponse.getMsgStatus());
+                if (otpResponse.getLoginStatus().equalsIgnoreCase("Success")) {
+                    progressDialog.dismiss();
+                    if (otpResponse.getMsgStatus().equalsIgnoreCase("failed")) {
+
+                        otpView.setVisibility(View.GONE);
+
+                        cardViews.get(0).setVisibility(View.GONE);
+
+                    } else if (otpResponse.getMsgStatus().equalsIgnoreCase("Sent")) {
+
+                        otpView.setVisibility(View.VISIBLE);
+
+                        cardViews.get(0).setVisibility(View.GONE);
+
+
+                        textView.setText("Verify");
+
+                    } else {
+
+                        otpView.setVisibility(View.GONE);
+
+                        cardViews.get(0).setVisibility(View.GONE);
+
+                    }
+                } else {
+                    progressDialog.dismiss();
+
+                    otpView.setVisibility(View.GONE);
+
+                    cardViews.get(0).setVisibility(View.GONE);
+
+
+                }
+
+            }
+
+            //finally close connection
+            reader.close();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
+
+
+    }
+
+
     private void requestPermission() {
+
         Dexter.withActivity(this)
                 .withPermissions(
                         Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -189,6 +399,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.Connecti
                 })
                 .onSameThread()
                 .check();
+
     }
 
     private void showSettingsDialog() {
@@ -220,5 +431,11 @@ public class Login extends AppCompatActivity implements GoogleApiClient.Connecti
         Uri uri = Uri.fromParts("package", getPackageName(), null);
         intent.setData(uri);
         startActivityForResult(intent, 101);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        requestPermission();
     }
 }

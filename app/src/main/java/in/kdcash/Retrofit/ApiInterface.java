@@ -6,6 +6,7 @@ import java.util.Map;
 import in.kdcash.Model.Area;
 import in.kdcash.Model.City;
 import in.kdcash.Model.Country;
+import in.kdcash.Model.LoginResponse;
 import in.kdcash.Model.Pincode;
 import in.kdcash.Model.PostResponse;
 import in.kdcash.Model.ProfileResponse;
@@ -23,6 +24,11 @@ import retrofit2.http.Part;
 import retrofit2.http.Query;
 
 public interface ApiInterface {
+
+
+    @GET("/api/api/UserMaster/Mobileno")
+    Call<LoginResponse> checkMobileNumber(@Query("Mobileno") String mobileNumber);
+
 
     @GET("/api/api/General/country")
     Call<Country> getCountryList(@Query("pageNo") String pageNo,
@@ -70,6 +76,6 @@ public interface ApiInterface {
                                      @Part("Status") RequestBody status);
 
 
-    @POST()
+    @POST("/api/api/UserMaster/CreateAgent")
     Call<PostResponse> registration(@Body ProfileResponse profileResponse);
 }

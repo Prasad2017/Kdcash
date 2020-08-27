@@ -23,6 +23,9 @@ public class ProfileResponse {
     @SerializedName("Country")
     @Expose
     private String country;
+    @SerializedName("Code")
+    @Expose
+    private String countryCode;
     @SerializedName("State")
     @Expose
     private String state;
@@ -137,5 +140,13 @@ public class ProfileResponse {
 
     public void setWalletBalance(String walletBalance) {
         this.walletBalance = walletBalance;
+    }
+
+    public String getCountryCode() {
+        return countryCode;
+    }
+
+    public void setCountryCode(String countryCode) {
+        this.countryCode = countryCode;
     }
 }
